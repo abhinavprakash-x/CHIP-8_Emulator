@@ -66,23 +66,25 @@ void Chip8::cycle()
     while(true)
     {
         uint16_t opcode = fetch();
-        decode(opcode);
-        execute();
+        execute(opcode);
+        PC = PC+2;
     }
 }
 
 uint16_t Chip8::fetch()
 {
-    uint16_t opcode = 0;
-    opcode = (memory[PC] << 8) | memory[PC+1];
-    PC = PC+2;
+    uint16_t opcode = (memory[PC] << 8) | memory[PC+1];
     return opcode;
 }
 
-void Chip8::decode(uint16_t opcode)
+void Chip8::execute(uint16_t opcode)
 {
-}
+    //first decode x,y,nnn,n,kk from opcode and then execute
+    uint16_t NNN = opcode & 0x0fff;
+    uint8_t KK = opcode & 0x00ff;
+    uint8_t N = opcode & 0x000f;
+    uint8_t X = (opcode & 0x0f00) >> 8;
+    uint8_t Y = (opcode & 0x00f0) >> 4;
 
-void Chip8::execute()
-{
+    //now execute
 }

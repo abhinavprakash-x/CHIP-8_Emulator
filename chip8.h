@@ -34,6 +34,5 @@ public:
     void cycle();
 
     uint16_t fetch();
-    void decode(uint16_t opcode);
-    void execute();
+    void execute(uint16_t opcode);
 };
