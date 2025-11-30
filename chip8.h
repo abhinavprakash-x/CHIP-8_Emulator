@@ -35,4 +35,40 @@ public:
 
     uint16_t fetch();
     void execute(uint16_t opcode);
+
+private:
+    void CLS();
+    void RET();
+    void JP_addr();
+    void CALL_addr();
+    void SE_Vx_kk();
+    void SNE_Vx_kk();
+    void SE_Vx_Vy();
+    void LD_Vx_kk();
+    void ADD_Vx_kk();
+    void LD_Vx_Vy();
+    void OR_Vx_Vy();
+    void AND_Vx_Vy();
+    void XOR_Vx_Vy();
+    void ADD_Vx_Vy();
+    void SUB_Vx_Vy();
+    void SHR_Vx_Vy();
+    void SUBN_Vx_Vy();
+    void SHL_Vx_Vy();
+    void SNE_Vx_Vy();
+    void LD_I_addr();
+    void JP_V0_addr();
+    void RND_Vx_kk();
+    void DRW_Vx_Vy_n();
+    void SKP_Vx();
+    void SKNP_Vx();
+    void LD_Vx_dt();
+    void LD_Vx_k();
+    void LD_dt_Vx();
+    void LD_st_Vx();
+    void ADD_I_Vx();
+    void LD_f_Vx();
+    void LD_b_Vx();
+    void LD_I_Vx();
+    void LD_Vx_I();
 };

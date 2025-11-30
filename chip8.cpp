@@ -87,4 +87,15 @@ void Chip8::execute(uint16_t opcode)
     uint8_t Y = (opcode & 0x00f0) >> 4;
 
     //now execute
+    switch(opcode & 0xf000)
+    {
+        case 0x0000:
+        {
+            if(opcode == 0x00e0)
+                CLS();
+            else if(opcode == 0x00ee)
+                RET();
+            break;
+        }
+    }
 }
