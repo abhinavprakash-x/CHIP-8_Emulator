@@ -5,8 +5,8 @@
 int main()
 {
     Chip8 cpu;
-    cpu.loadROM("1-chip8-logo.ch8");
-    for(int i = 512; i < 512 + 20; ++i)
+    cpu.loadROM("5-quirks.ch8");
+    for(int i = 512; i < 4096; ++i)
     {
         std::cout << std::hex 
               << std::setw(2)          // Always width of 2
@@ -14,5 +14,7 @@ int main()
               << (int)cpu.memory[i] 
               << " ";                  // Add a space for readability
     }
+    std::cout<<"\n\n\n";
+    cpu.fetch();
     return 0;
 }

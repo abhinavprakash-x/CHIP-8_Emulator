@@ -60,3 +60,29 @@ void Chip8::loadROM(const char* filename)
         file.close();
     }
 }
+
+void Chip8::cycle()
+{
+    while(true)
+    {
+        uint16_t opcode = fetch();
+        decode(opcode);
+        execute();
+    }
+}
+
+uint16_t Chip8::fetch()
+{
+    uint16_t opcode = 0;
+    opcode = (memory[PC] << 8) | memory[PC+1];
+    PC = PC+2;
+    return opcode;
+}
+
+void Chip8::decode(uint16_t opcode)
+{
+}
+
+void Chip8::execute()
+{
+}

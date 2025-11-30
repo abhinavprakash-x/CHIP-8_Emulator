@@ -31,4 +31,9 @@ public:
 
     Chip8();
     void loadROM(const char* filename);
+    void cycle();
+
+    uint16_t fetch();
+    void decode(uint16_t opcode);
+    void execute();
 };
