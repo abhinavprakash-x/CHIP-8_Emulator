@@ -97,5 +97,40 @@ void Chip8::execute(uint16_t opcode)
                 RET();
             break;
         }
+        case 0x1000:
+        {
+            JP_addr();
+            break;
+        }
+        case 0x2000:
+        {
+            CALL_addr();
+            break;
+        }
+        case 0x3000:
+        {
+            SE_Vx_kk();
+            break;
+        }
+        case 0x4000:
+        {
+            SNE_Vx_kk();
+            break;
+        }
+        case 0x5000:
+        {
+            SE_Vx_Vy();
+            break;
+        }
+        case 0x6000:
+        {
+            LD_Vx_kk();
+            break;
+        }
+        case 0x7000:
+        {
+            ADD_Vx_kk();
+            break;
+        }
     }
 }
