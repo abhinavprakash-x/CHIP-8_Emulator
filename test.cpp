@@ -15,6 +15,6 @@ int main()
               << " ";                  // Add a space for readability
     }
     std::cout<<"\n\n\n";
-    cpu.fetch();
+    cpu.cycle();
     return 0;
 }
