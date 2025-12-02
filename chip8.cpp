@@ -93,8 +93,8 @@ void Chip8::execute(uint16_t opcode)
             else if(opcode == 0x00ee) RET();
             break;
         }
-        case 0x1000: JP_addr(); break;
-        case 0x2000: CALL_addr(); break;
+        case 0x1000: JP_addr(NNN); break;
+        case 0x2000: CALL_addr(NNN); break;
         case 0x3000: SE_Vx_kk(); break;
         case 0x4000: SNE_Vx_kk(); break;
         case 0x5000: SE_Vx_Vy(); break;
@@ -145,4 +145,37 @@ void Chip8::execute(uint16_t opcode)
         }
         default: std::cout<<"Error with opcode! \n"; //also cout the opcode TODO!
     }
+}
+
+void Chip8::CLS()
+{
+    memset(display, false, sizeof(display));
+}
+
+void Chip8::RET()
+{
+    if(stackPointer == 0)
+    {
+        std::cout<<"Error! Invalid Stack Operation (Underflow)";
+        return;
+    }
+    stackPointer--;
+    PC = stack[stackPointer];
+}
+
+void Chip8::JP_addr(uint16_t NNN)
+{
+    PC = NNN;
+}
+
+void Chip8::CALL_addr(uint16_t NNN)
+{
+    if(stackPointer >= 16)
+    {
+        std::cout<<"Error! Invalid Stack Operation (Overflow)";
+        return;
+    }
+    stack[stackPointer] = PC;
+    stackPointer++;
+    PC = NNN;
 }

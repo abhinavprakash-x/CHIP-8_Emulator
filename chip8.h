@@ -39,8 +39,8 @@ public:
 private:
     void CLS();
     void RET();
-    void JP_addr();
-    void CALL_addr();
+    void JP_addr(uint16_t NNN);
+    void CALL_addr(uint16_t NNN);
     void SE_Vx_kk();
     void SNE_Vx_kk();
     void SE_Vx_Vy();
