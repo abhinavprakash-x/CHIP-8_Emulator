@@ -104,20 +104,20 @@ void Chip8::execute(uint16_t opcode)
         {
             uint8_t last_bit = opcode & 0x000f;
             if(last_bit == 0x00) LD_Vx_Vy(X, Y);
-            else if(last_bit == 0x01) OR_Vx_Vy();
-            else if(last_bit == 0x02) AND_Vx_Vy();
-            else if(last_bit == 0x03) XOR_Vx_Vy();
-            else if(last_bit == 0x04) ADD_Vx_Vy();
-            else if(last_bit == 0x05) SUB_Vx_Vy();
-            else if(last_bit == 0x06) SHR_Vx_Vy();
-            else if(last_bit == 0x07) SUBN_Vx_Vy();
-            else if(last_bit == 0x0e) SHL_Vx_Vy();
+            else if(last_bit == 0x01) OR_Vx_Vy(X, Y);
+            else if(last_bit == 0x02) AND_Vx_Vy(X, Y);
+            else if(last_bit == 0x03) XOR_Vx_Vy(X, Y);
+            else if(last_bit == 0x04) ADD_Vx_Vy(X, Y);
+            else if(last_bit == 0x05) SUB_Vx_Vy(X, Y);
+            else if(last_bit == 0x06) SHR_Vx_Vy(X, Y);
+            else if(last_bit == 0x07) SUBN_Vx_Vy(X, Y);
+            else if(last_bit == 0x0e) SHL_Vx_Vy(X, Y);
             else std::cout<<"Error! last 4 bits of opcode in 8xy_ is wrong. \n";
             break;
         }
-        case 0x9000: SNE_Vx_Vy(); break;
-        case 0xa000: LD_I_addr(); break;
-        case 0xb000: JP_V0_addr(); break;
+        case 0x9000: SNE_Vx_Vy(X, Y); break;
+        case 0xa000: LD_I_addr(NNN); break;
+        case 0xb000: JP_V0_addr(NNN); break;
         case 0xc000: RND_Vx_kk(); break;
         case 0xd000: DRW_Vx_Vy_n(); break;
         case 0xe000:
@@ -208,4 +208,72 @@ void Chip8::ADD_Vx_kk(uint8_t X, uint8_t KK)
 void Chip8::LD_Vx_Vy(uint8_t X, uint8_t Y)
 {
     V[X] = V[Y];
+}
+
+void Chip8::OR_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    V[X] = V[X] | V[Y];
+}
+
+void Chip8::AND_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    V[X] = V[X] & V[Y];
+}
+
+void Chip8::XOR_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    V[X] = V[X] ^ V[Y];
+}
+
+void Chip8::ADD_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    uint16_t sum = V[X] + V[Y];
+    if(sum > 255) V[0xf] = 1;
+    else V[0xf] = 0;
+    V[X] = sum & 0xff;
+}
+
+void Chip8::SUB_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    if(V[X] > V[Y]) V[0xf] = 1;
+    else V[0xf] = 0;
+    V[X] = V[X] - V[Y];
+}
+
+void Chip8::SHR_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    uint8_t least_significant_bit = V[X] & 0x1;
+    if(least_significant_bit == 0x1) V[0xf] = 1;
+    else V[0xf] = 0;
+    V[X] = V[X] >> 1;
+}
+
+void Chip8::SUBN_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    if(V[Y] > V[X]) V[0xf] = 1;
+    else V[0xf] = 0;
+    V[X] = V[Y] - V[X];
+}
+
+void Chip8::SHL_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    uint8_t most_significant_bit = (V[X] >> 7) & 1;
+    if(most_significant_bit == 0x1) V[0xf] = 1;
+    else V[0xf] = 0;
+    V[X] = V[X] << 1;
+}
+
+void Chip8::SNE_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    if(V[X] != V[Y]) PC += 2;
+}
+
+void Chip8::LD_I_addr(uint16_t NNN)
+{
+    I = NNN;
+}
+
+void Chip8::JP_V0_addr(uint16_t NNN)
+{
+    PC = NNN + V[0x0];
 }
