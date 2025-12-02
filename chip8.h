@@ -41,12 +41,12 @@ private:
     void RET();
     void JP_addr(uint16_t NNN);
     void CALL_addr(uint16_t NNN);
-    void SE_Vx_kk();
-    void SNE_Vx_kk();
-    void SE_Vx_Vy();
-    void LD_Vx_kk();
-    void ADD_Vx_kk();
-    void LD_Vx_Vy();
+    void SE_Vx_kk(uint8_t X, uint8_t KK);
+    void SNE_Vx_kk(uint8_t X, uint8_t KK);
+    void SE_Vx_Vy(uint8_t X, uint8_t Y);
+    void LD_Vx_kk(uint8_t X, uint8_t KK);
+    void ADD_Vx_kk(uint8_t X, uint8_t KK);
+    void LD_Vx_Vy(uint8_t X, uint8_t Y);
     void OR_Vx_Vy();
     void AND_Vx_Vy();
     void XOR_Vx_Vy();

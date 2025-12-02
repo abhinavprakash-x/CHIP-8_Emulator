@@ -95,15 +95,15 @@ void Chip8::execute(uint16_t opcode)
         }
         case 0x1000: JP_addr(NNN); break;
         case 0x2000: CALL_addr(NNN); break;
-        case 0x3000: SE_Vx_kk(); break;
-        case 0x4000: SNE_Vx_kk(); break;
-        case 0x5000: SE_Vx_Vy(); break;
-        case 0x6000: LD_Vx_kk(); break;
-        case 0x7000: ADD_Vx_kk(); break;
+        case 0x3000: SE_Vx_kk(X, KK); break;
+        case 0x4000: SNE_Vx_kk(X, KK); break;
+        case 0x5000: SE_Vx_Vy(X, Y); break;
+        case 0x6000: LD_Vx_kk(X, KK); break;
+        case 0x7000: ADD_Vx_kk(X, KK); break;
         case 0x8000:
         {
             uint8_t last_bit = opcode & 0x000f;
-            if(last_bit == 0x00) LD_Vx_Vy();
+            if(last_bit == 0x00) LD_Vx_Vy(X, Y);
             else if(last_bit == 0x01) OR_Vx_Vy();
             else if(last_bit == 0x02) AND_Vx_Vy();
             else if(last_bit == 0x03) XOR_Vx_Vy();
@@ -178,4 +178,34 @@ void Chip8::CALL_addr(uint16_t NNN)
     stack[stackPointer] = PC;
     stackPointer++;
     PC = NNN;
+}
+
+void Chip8::SE_Vx_kk(uint8_t X, uint8_t KK)
+{
+    if(V[X] == KK) PC += 2;
+}
+
+void Chip8::SNE_Vx_kk(uint8_t X, uint8_t KK)
+{
+    if(V[X] != KK) PC += 2;
+}
+
+void Chip8::SE_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    if(V[X] == V[Y]) PC += 2;
+}
+
+void Chip8::LD_Vx_kk(uint8_t X, uint8_t KK)
+{
+    V[X] = KK;
+}
+
+void Chip8::ADD_Vx_kk(uint8_t X, uint8_t KK)
+{
+    V[X] = V[X] + KK;
+}
+
+void Chip8::LD_Vx_Vy(uint8_t X, uint8_t Y)
+{
+    V[X] = V[Y];
 }
