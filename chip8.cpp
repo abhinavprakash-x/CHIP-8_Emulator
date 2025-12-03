@@ -31,6 +31,7 @@ Chip8::Chip8()
     memset(stack, 0, sizeof(stack));
     memset(keyboard, false, sizeof(keyboard));
     memset(display, false, sizeof(display));
+    srand(time(0)); //for random byte generation Cxkk opcode
 
     for(int i = 0; i < 80; ++i)
     {
@@ -118,28 +119,28 @@ void Chip8::execute(uint16_t opcode)
         case 0x9000: SNE_Vx_Vy(X, Y); break;
         case 0xa000: LD_I_addr(NNN); break;
         case 0xb000: JP_V0_addr(NNN); break;
-        case 0xc000: RND_Vx_kk(); break;
-        case 0xd000: DRW_Vx_Vy_n(); break;
+        case 0xc000: RND_Vx_kk(X, KK); break;
+        case 0xd000: DRW_Vx_Vy_n(X, Y, N); break;
         case 0xe000:
         {
             uint8_t last_bits = opcode & 0xff;
-            if(last_bits == 0x9e) SKP_Vx();
-            else if(last_bits == 0xa1) SKNP_Vx();
+            if(last_bits == 0x9e) SKP_Vx(X);
+            else if(last_bits == 0xa1) SKNP_Vx(X);
             else std::cout<<"Error! last 8 bits of opcode in Ex__ is wrong. \n";
             break;
         }
         case 0xf000:
         {
             uint8_t last_bits = opcode & 0xff;
-            if(last_bits == 0x07) LD_Vx_dt();
-            else if(last_bits == 0x0a) LD_Vx_k();
-            else if(last_bits == 0x15) LD_dt_Vx();
-            else if(last_bits == 0x18) LD_st_Vx();
-            else if(last_bits == 0x1e) ADD_I_Vx();
-            else if(last_bits == 0x29) LD_f_Vx();
-            else if(last_bits == 0x33) LD_b_Vx();
-            else if(last_bits == 0x55) LD_I_Vx();
-            else if(last_bits == 0x65) LD_Vx_I();
+            if(last_bits == 0x07) LD_Vx_dt(X);
+            else if(last_bits == 0x0a) LD_Vx_k(X);
+            else if(last_bits == 0x15) LD_dt_Vx(X);
+            else if(last_bits == 0x18) LD_st_Vx(X);
+            else if(last_bits == 0x1e) ADD_I_Vx(X);
+            else if(last_bits == 0x29) LD_f_Vx(X);
+            else if(last_bits == 0x33) LD_b_Vx(X);
+            else if(last_bits == 0x55) LD_I_Vx(X);
+            else if(last_bits == 0x65) LD_Vx_I(X);
             else std::cout<<"Error! last 8 bits of opcode in Fx__ is wrong. \n";
             break;
         }
@@ -276,4 +277,59 @@ void Chip8::LD_I_addr(uint16_t NNN)
 void Chip8::JP_V0_addr(uint16_t NNN)
 {
     PC = NNN + V[0x0];
+}
+
+void Chip8::RND_Vx_kk(uint8_t X, uint8_t KK)
+{
+    uint8_t random = rand() % 256;
+    V[X] = random & KK;
+}
+
+void Chip8::DRW_Vx_Vy_n(uint8_t X, uint8_t Y, uint8_t N)
+{
+    //TODO Later
+}
+
+void Chip8::SKP_Vx(uint8_t X)
+{
+}
+
+void Chip8::SKNP_Vx(uint8_t X)
+{
+}
+
+void Chip8::LD_Vx_dt(uint8_t X)
+{
+}
+
+void Chip8::LD_Vx_k(uint8_t X)
+{
+}
+
+void Chip8::LD_dt_Vx(uint8_t X)
+{
+}
+
+void Chip8::LD_st_Vx(uint8_t X)
+{
+}
+
+void Chip8::ADD_I_Vx(uint8_t X)
+{
+}
+
+void Chip8::LD_f_Vx(uint8_t X)
+{
+}
+
+void Chip8::LD_b_Vx(uint8_t X)
+{
+}
+
+void Chip8::LD_I_Vx(uint8_t X)
+{
+}
+
+void Chip8::LD_Vx_I(uint8_t X)
+{
 }
