@@ -315,30 +315,43 @@ void Chip8::DRW_Vx_Vy_n(uint8_t X, uint8_t Y, uint8_t N)
 
 void Chip8::SKP_Vx(uint8_t X)
 {
+    if(keyboard[V[X]])
+    {
+        PC = PC + 2;
+    }
 }
 
 void Chip8::SKNP_Vx(uint8_t X)
 {
+    if(!keyboard[V[X]])
+    {
+        PC = PC + 2;
+    }
 }
 
 void Chip8::LD_Vx_dt(uint8_t X)
 {
+    V[X] = delayTimer;
 }
 
 void Chip8::LD_Vx_k(uint8_t X)
 {
+    // V[X] = keyboard[?] whichever key is pressed
 }
 
 void Chip8::LD_dt_Vx(uint8_t X)
 {
+    delayTimer = V[X];
 }
 
 void Chip8::LD_st_Vx(uint8_t X)
 {
+    soundTimer = V[X];
 }
 
 void Chip8::ADD_I_Vx(uint8_t X)
 {
+    I = I + V[X];
 }
 
 void Chip8::LD_f_Vx(uint8_t X)
