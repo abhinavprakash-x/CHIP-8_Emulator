@@ -20,9 +20,15 @@ int main()
 
     bool running = true;
     SDL_Event event;
+    bool wasBeeping = false;
+
+    uint32_t last_cpu_tick = SDL_GetTicks();
+    uint32_t last_timer_tick = SDL_GetTicks();
+    uint32_t current_tick;
 
     while(running)
     {
+        current_tick = SDL_GetTicks();
         while(SDL_PollEvent(&event))
         {
             if(event.type == SDL_EVENT_QUIT)
@@ -31,16 +37,28 @@ int main()
             }
         }
 
-        //update screen
+        //update screen and handle key press and play sound
         update_screen(cpu, renderer);
-        //handle input
         handle_input(cpu);
-        //update timers
-        //cpu cycle
-        cpu.cycle();
+        if(cpu.soundTimer > 0 && !wasBeeping)
+        {
+            std::cout<< "\a\a" << std::flush;
+        }
+        wasBeeping = (cpu.soundTimer > 0);
+
+        //cpu cycle and timers
+        if(current_tick - last_cpu_tick >= 2) //500Hz
+        {
+            cpu.cycle();
+            last_cpu_tick = current_tick;
+        }
+        if(current_tick - last_timer_tick >= 16) //60Hz
+        {
+            cpu.update_timers();
+            last_timer_tick = current_tick;
+        }
 
         SDL_RenderPresent(renderer);
-        SDL_Delay(1);
     }
 
     SDL_DestroyRenderer(renderer);
