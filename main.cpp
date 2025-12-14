@@ -9,14 +9,20 @@ const int cell_height = height / 32;
 void handle_input(Chip8 &cpu);
 void update_screen(Chip8 &cpu, SDL_Renderer *renderer);
 
-int main()
+int main(int argc, char* argv[])
 {
+    if (argc < 2)
+    {
+        std::cout << "Usage: " << argv[0] << " <rom_name.ch8>\n";
+        return -1;
+    }
+
     SDL_Init(SDL_INIT_VIDEO);
     SDL_Window *window = SDL_CreateWindow("CHIP-8", width, height, 0);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, nullptr);
 
     Chip8 cpu;
-    cpu.loadROM("2-ibm-logo.ch8");
+    cpu.loadROM(argv[1]);
 
     bool running = true;
     SDL_Event event;
