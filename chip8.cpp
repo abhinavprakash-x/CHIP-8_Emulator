@@ -287,7 +287,30 @@ void Chip8::RND_Vx_kk(uint8_t X, uint8_t KK)
 
 void Chip8::DRW_Vx_Vy_n(uint8_t X, uint8_t Y, uint8_t N)
 {
-    //TODO Later
+    V[0xF] = 0;
+
+    uint8_t xPos = V[X] % 64;
+    uint8_t yPos = V[Y] % 32;
+
+    for (int row = 0; row < N; row++)
+    {
+        uint8_t spriteByte = memory[I + row];
+
+        for (int col = 0; col < 8; col++)
+        {
+            if ((spriteByte & (0x80 >> col)) != 0)
+            {
+                int x = (xPos + col) % 64;
+                int y = (yPos + row) % 32;
+                int index = y * 64 + x;
+
+                if (display[index])
+                    V[0xF] = 1;
+
+                display[index] ^= true;
+            }
+        }
+    }
 }
 
 void Chip8::SKP_Vx(uint8_t X)

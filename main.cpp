@@ -90,8 +90,8 @@ void update_screen(Chip8 &cpu, SDL_Renderer *renderer)
             {
                 SDL_FRect pixel
                     {
-                        .x = x * cell_width,
-                        .y = y * cell_height,
+                        .x = (float) x * cell_width,
+                        .y = (float) y * cell_height,
                         .w = cell_width,
                         .h = cell_height
                     };
