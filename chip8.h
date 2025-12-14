@@ -32,6 +32,7 @@ public:
     Chip8();
     void loadROM(const char* filename);
     void cycle();
+    void update_timers();
 
     uint16_t fetch();
     void execute(uint16_t opcode);

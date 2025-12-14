@@ -336,7 +336,15 @@ void Chip8::LD_Vx_dt(uint8_t X)
 
 void Chip8::LD_Vx_k(uint8_t X)
 {
-    // V[X] = keyboard[?] whichever key is pressed
+    for(int i=0; i < 16; ++i)
+    {
+        if(keyboard[i])
+        {
+            V[X] = i;
+            return;
+        }
+    }
+    PC = PC - 2;
 }
 
 void Chip8::LD_dt_Vx(uint8_t X)
@@ -356,16 +364,34 @@ void Chip8::ADD_I_Vx(uint8_t X)
 
 void Chip8::LD_f_Vx(uint8_t X)
 {
+    I = V[X] * 5;
 }
 
 void Chip8::LD_b_Vx(uint8_t X)
 {
+    memory[I]     = V[X] / 100;
+    memory[I + 1] = (V[X] / 10) % 10;
+    memory[I + 2] = V[X] % 10;
 }
 
 void Chip8::LD_I_Vx(uint8_t X)
 {
+    for(int i = 0; i <= X; ++i)
+    {
+        memory[I+i] = V[i];
+    }
 }
 
 void Chip8::LD_Vx_I(uint8_t X)
 {
+    for(int i = 0; i <= X; ++i)
+    {
+        V[i] = memory[I+i];
+    }
+}
+
+void Chip8::update_timers()
+{
+    if (delayTimer > 0) delayTimer--;
+    if (soundTimer > 0) soundTimer--;
 }
