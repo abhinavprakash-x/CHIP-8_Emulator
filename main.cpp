@@ -7,6 +7,7 @@ const int cell_width = width / 64;
 const int cell_height = height / 32;
 
 void handle_input(Chip8 &cpu);
+void update_screen(Chip8 &cpu, SDL_Renderer *renderer);
 
 int main()
 {
@@ -15,13 +16,10 @@ int main()
     SDL_Renderer *renderer = SDL_CreateRenderer(window, nullptr);
 
     Chip8 cpu;
+    cpu.loadROM("2-ibm-logo.ch8");
+
     bool running = true;
     SDL_Event event;
-
-    const SDL_FRect rect
-    {
-        .x = 0, .y = 0, .w = width, .h = height
-    };
 
     while(running)
     {
@@ -34,16 +32,15 @@ int main()
         }
 
         //update screen
+        update_screen(cpu, renderer);
         //handle input
         handle_input(cpu);
         //update timers
         //cpu cycle
         cpu.cycle();
 
-        SDL_SetRenderDrawColor(renderer, 255,255,255,255);
-        SDL_RenderFillRect(renderer, &rect);
         SDL_RenderPresent(renderer);
-        SDL_Delay(20);
+        SDL_Delay(1);
     }
 
     SDL_DestroyRenderer(renderer);
@@ -76,4 +73,30 @@ void handle_input(Chip8 &cpu)
     cpu.keyboard[0x0] = keys[SDL_SCANCODE_X];
     cpu.keyboard[0xB] = keys[SDL_SCANCODE_C];
     cpu.keyboard[0xF] = keys[SDL_SCANCODE_V];
+}
+
+void update_screen(Chip8 &cpu, SDL_Renderer *renderer)
+{
+    SDL_SetRenderDrawColor(renderer, 0,0,0,255);
+    SDL_RenderClear(renderer);
+
+    SDL_SetRenderDrawColor(renderer, 255,255,255,255);
+
+    for(int y = 0; y < 32; ++y)
+    {
+        for(int x = 0; x < 64; ++x)
+        {
+            if(cpu.display[y * 64 + x])
+            {
+                SDL_FRect pixel
+                    {
+                        .x = x * cell_width,
+                        .y = y * cell_height,
+                        .w = cell_width,
+                        .h = cell_height
+                    };
+                SDL_RenderFillRect(renderer, &pixel);
+            }
+        }
+    }
 }
