@@ -228,40 +228,47 @@ void Chip8::XOR_Vx_Vy(uint8_t X, uint8_t Y)
 
 void Chip8::ADD_Vx_Vy(uint8_t X, uint8_t Y)
 {
-    uint16_t sum = V[X] + V[Y];
-    if(sum > 255) V[0xf] = 1;
-    else V[0xf] = 0;
-    V[X] = sum & 0xff;
+    uint8_t vx = V[X];
+    uint8_t vy = V[Y];
+
+    uint16_t sum = vx + vy;
+
+    V[X] = sum & 0xFF;
+    V[0xF] = (sum > 0xFF);
 }
 
 void Chip8::SUB_Vx_Vy(uint8_t X, uint8_t Y)
 {
-    if(V[X] > V[Y]) V[0xf] = 1;
-    else V[0xf] = 0;
-    V[X] = V[X] - V[Y];
+    uint8_t vx = V[X];
+    uint8_t vy = V[Y];
+
+    V[X] = vx - vy;
+    V[0xF] = (vx >= vy);
 }
 
 void Chip8::SHR_Vx_Vy(uint8_t X, uint8_t Y)
 {
-    uint8_t least_significant_bit = V[X] & 0x1;
-    if(least_significant_bit == 0x1) V[0xf] = 1;
-    else V[0xf] = 0;
-    V[X] = V[X] >> 1;
+    uint8_t vy = V[Y];
+
+    V[X] = vy >> 1;
+    V[0xF] = vy & 0x1;
 }
 
 void Chip8::SUBN_Vx_Vy(uint8_t X, uint8_t Y)
 {
-    if(V[Y] > V[X]) V[0xf] = 1;
-    else V[0xf] = 0;
-    V[X] = V[Y] - V[X];
+    uint8_t vx = V[X];
+    uint8_t vy = V[Y];
+
+    V[X] = vy - vx;
+    V[0xF] = (vy >= vx);
 }
 
 void Chip8::SHL_Vx_Vy(uint8_t X, uint8_t Y)
 {
-    uint8_t most_significant_bit = (V[X] >> 7) & 1;
-    if(most_significant_bit == 0x1) V[0xf] = 1;
-    else V[0xf] = 0;
-    V[X] = V[X] << 1;
+    uint8_t vy = V[Y];
+
+    V[X] = vy << 1;
+    V[0xF] = (vy >> 7) & 0x1;
 }
 
 void Chip8::SNE_Vx_Vy(uint8_t X, uint8_t Y)
@@ -380,6 +387,7 @@ void Chip8::LD_I_Vx(uint8_t X)
     {
         memory[I+i] = V[i];
     }
+    I += X + 1;
 }
 
 void Chip8::LD_Vx_I(uint8_t X)
@@ -388,6 +396,7 @@ void Chip8::LD_Vx_I(uint8_t X)
     {
         V[i] = memory[I+i];
     }
+    I += X + 1;
 }
 
 void Chip8::update_timers()
