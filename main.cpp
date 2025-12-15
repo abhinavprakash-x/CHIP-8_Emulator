@@ -103,13 +103,6 @@ void handle_input(Chip8& cpu)
     cpu.keyboard[0x0] = keys[SDL_SCANCODE_X];
     cpu.keyboard[0xB] = keys[SDL_SCANCODE_C];
     cpu.keyboard[0xF] = keys[SDL_SCANCODE_V];
-
-    // latch new key presses
-    for (int i = 0; i < 16; i++)
-    {
-        if (cpu.keyboard[i] && !cpu.prev_keyboard[i])
-            cpu.latched_key = i;
-    }
 }
 
 void update_screen(Chip8 &cpu, SDL_Renderer *renderer)

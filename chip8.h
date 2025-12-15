@@ -23,8 +23,9 @@ public:
     bool prev_keyboard[16];
     bool display[64*32];
     
-    int latched_key;         //Fix for Edge vs Level Trigger Key Press
+    int latched_key;        //Fix for Edge vs Level Trigger Key Press
     bool draw_flag;         //draw flag for optimization
+    bool waiting_for_key;
 
     //Public Functions
     Chip8();

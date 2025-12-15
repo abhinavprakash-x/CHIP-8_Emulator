@@ -41,6 +41,7 @@ Chip8::Chip8()
 
     draw_flag = false;
     latched_key = -1;
+    waiting_for_key = false;
 }
 
 void Chip8::loadROM(const char* filename)
@@ -349,14 +350,42 @@ void Chip8::LD_Vx_dt(uint8_t X)
 
 void Chip8::LD_Vx_k(uint8_t X)
 {
-    if (latched_key != -1)
+    // First time entering Fx0A
+    if (!waiting_for_key)
     {
-        V[X] = latched_key;
-        latched_key = -1;
+        waiting_for_key = true;
+        PC -= 2;              // halt CPU
         return;
     }
 
-    PC -= 2; //block all other executions until key press
+    // Waiting for a NEW key press
+    if (latched_key == -1)
+    {
+        for (int i = 0; i < 16; ++i)
+        {
+            // key must be newly pressed AFTER Fx0A started
+            if (keyboard[i] && !prev_keyboard[i])
+            {
+                latched_key = i;
+                break;
+            }
+        }
+
+        PC -= 2;
+        return;
+    }
+
+    // Key pressed, now wait for release
+    if (keyboard[latched_key])
+    {
+        PC -= 2;
+        return;
+    }
+
+    // Key released → finish Fx0A
+    V[X] = latched_key;
+    latched_key = -1;
+    waiting_for_key = false;
 }
 
 void Chip8::LD_dt_Vx(uint8_t X)
