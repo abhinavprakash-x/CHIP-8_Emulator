@@ -69,6 +69,8 @@ int main(int argc, char* argv[])
             std::cout<< "\a\a" << std::flush;
         }
         wasBeeping = (cpu.soundTimer > 0);
+
+        SDL_Delay(1);
     }
 
     SDL_DestroyRenderer(renderer);
