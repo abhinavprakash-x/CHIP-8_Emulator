@@ -220,16 +220,19 @@ void Chip8::LD_Vx_Vy(uint8_t X, uint8_t Y)
 void Chip8::OR_Vx_Vy(uint8_t X, uint8_t Y)
 {
     V[X] = V[X] | V[Y];
+    V[0xf] = 0;
 }
 
 void Chip8::AND_Vx_Vy(uint8_t X, uint8_t Y)
 {
     V[X] = V[X] & V[Y];
+    V[0xf] = 0;
 }
 
 void Chip8::XOR_Vx_Vy(uint8_t X, uint8_t Y)
 {
     V[X] = V[X] ^ V[Y];
+    V[0xf] = 0;
 }
 
 void Chip8::ADD_Vx_Vy(uint8_t X, uint8_t Y)
