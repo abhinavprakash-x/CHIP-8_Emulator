@@ -30,6 +30,7 @@ Chip8::Chip8()
     stackPointer = 0;
     memset(stack, 0, sizeof(stack));
     memset(keyboard, false, sizeof(keyboard));
+    memset(prev_keyboard, false, sizeof(prev_keyboard));
     memset(display, false, sizeof(display));
     srand(time(0)); //for random byte generation Cxkk opcode
 
@@ -37,6 +38,9 @@ Chip8::Chip8()
     {
         memory[i] = fontset[i];
     }
+
+    draw_flag = false;
+    latched_key = -1;
 }
 
 void Chip8::loadROM(const char* filename)
@@ -151,6 +155,7 @@ void Chip8::execute(uint16_t opcode)
 void Chip8::CLS()
 {
     memset(display, false, sizeof(display));
+    draw_flag = true;
 }
 
 void Chip8::RET()
@@ -230,7 +235,6 @@ void Chip8::ADD_Vx_Vy(uint8_t X, uint8_t Y)
 {
     uint8_t vx = V[X];
     uint8_t vy = V[Y];
-
     uint16_t sum = vx + vy;
 
     V[X] = sum & 0xFF;
@@ -292,6 +296,7 @@ void Chip8::RND_Vx_kk(uint8_t X, uint8_t KK)
     V[X] = random & KK;
 }
 
+//This draw opcode follows Wrapping not Clipping (might change this if needed)
 void Chip8::DRW_Vx_Vy_n(uint8_t X, uint8_t Y, uint8_t N)
 {
     V[0xF] = 0;
@@ -318,6 +323,7 @@ void Chip8::DRW_Vx_Vy_n(uint8_t X, uint8_t Y, uint8_t N)
             }
         }
     }
+    draw_flag = true;
 }
 
 void Chip8::SKP_Vx(uint8_t X)
@@ -343,15 +349,14 @@ void Chip8::LD_Vx_dt(uint8_t X)
 
 void Chip8::LD_Vx_k(uint8_t X)
 {
-    for(int i=0; i < 16; ++i)
+    if (latched_key != -1)
     {
-        if(keyboard[i])
-        {
-            V[X] = i;
-            return;
-        }
+        V[X] = latched_key;
+        latched_key = -1;
+        return;
     }
-    PC = PC - 2;
+
+    PC -= 2; //block all other executions until key press
 }
 
 void Chip8::LD_dt_Vx(uint8_t X)

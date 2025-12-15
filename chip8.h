@@ -8,44 +8,45 @@
 class Chip8
 {
 public:
-    //RAM (4096 Bytes)
-    uint8_t memory[4096];
 
-    //16 Registers V0,V1,....VF
-    uint8_t V[16];
-    //Special Register Used to Store memory Addresses
-    uint16_t I;
-    //Two 8-bit registers used for delay and Sound timer
-    uint8_t delayTimer, soundTimer;
-    //Program Counter
-    uint16_t PC;
+    //The Chip8 Core Architecture
+    uint8_t memory[4096];               //RAM 4KB
+    uint8_t V[16];                      //V0-VF Registers
+    uint16_t I;                         //Index Register
+    uint8_t delayTimer, soundTimer;     //60Hz Timers
+    uint16_t PC;                        //Program Counter
+    uint8_t stackPointer;               //Stack Pointer
+    uint16_t stack[16];                 //Stack
 
-    //Stack Pointer
-    uint8_t stackPointer;
-    //Stack itself
-    uint16_t stack[16];
-
-    //input output devices
+    //Input Output Device States
     bool keyboard[16];
+    bool prev_keyboard[16];
     bool display[64*32];
+    
+    int latched_key;         //Fix for Edge vs Level Trigger Key Press
+    bool draw_flag;         //draw flag for optimization
 
+    //Public Functions
     Chip8();
     void loadROM(const char* filename);
     void cycle();
     void update_timers();
 
+    //Fetch Decode Execute Cycle
     uint16_t fetch();
     void execute(uint16_t opcode);
 
 private:
+
+    //Private Functions, Implementations of all opcodes
     void CLS();
     void RET();
     void JP_addr(uint16_t NNN);
     void CALL_addr(uint16_t NNN);
-    void SE_Vx_kk(uint8_t X, uint8_t KK);
+    void SE_Vx_kk(uint8_t X, uint8_t KK); 
     void SNE_Vx_kk(uint8_t X, uint8_t KK);
-    void SE_Vx_Vy(uint8_t X, uint8_t Y);
-    void LD_Vx_kk(uint8_t X, uint8_t KK);
+    void SE_Vx_Vy(uint8_t X, uint8_t Y);  
+    void LD_Vx_kk(uint8_t X, uint8_t KK); 
     void ADD_Vx_kk(uint8_t X, uint8_t KK);
     void LD_Vx_Vy(uint8_t X, uint8_t Y);
     void OR_Vx_Vy(uint8_t X, uint8_t Y);

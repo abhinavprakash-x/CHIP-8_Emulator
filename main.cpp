@@ -43,17 +43,10 @@ int main(int argc, char* argv[])
             }
         }
 
-        //update screen and handle key press and play sound
-        update_screen(cpu, renderer);
         handle_input(cpu);
-        if(cpu.soundTimer > 0 && !wasBeeping)
-        {
-            std::cout<< "\a\a" << std::flush;
-        }
-        wasBeeping = (cpu.soundTimer > 0);
-
+        
         //cpu cycle and timers
-        if(current_tick - last_cpu_tick >= 2) //500Hz
+        if(current_tick - last_cpu_tick >= 1) //1000Hz
         {
             cpu.cycle();
             last_cpu_tick = current_tick;
@@ -64,7 +57,18 @@ int main(int argc, char* argv[])
             last_timer_tick = current_tick;
         }
 
-        SDL_RenderPresent(renderer);
+        //update screen and handle key press and play sound
+        if(cpu.draw_flag)
+        {
+            update_screen(cpu, renderer);
+            cpu.draw_flag = false;
+        }
+
+        if(cpu.soundTimer > 0 && !wasBeeping)
+        {
+            std::cout<< "\a\a" << std::flush;
+        }
+        wasBeeping = (cpu.soundTimer > 0);
     }
 
     SDL_DestroyRenderer(renderer);
@@ -73,10 +77,12 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void handle_input(Chip8 &cpu)
+void handle_input(Chip8& cpu)
 {
-    const bool *keys = SDL_GetKeyboardState(nullptr);
+    memcpy(cpu.prev_keyboard, cpu.keyboard, sizeof(cpu.keyboard));
     memset(cpu.keyboard, false, sizeof(cpu.keyboard));
+
+    const bool* keys = SDL_GetKeyboardState(nullptr);
 
     cpu.keyboard[0x1] = keys[SDL_SCANCODE_1];
     cpu.keyboard[0x2] = keys[SDL_SCANCODE_2];
@@ -97,6 +103,13 @@ void handle_input(Chip8 &cpu)
     cpu.keyboard[0x0] = keys[SDL_SCANCODE_X];
     cpu.keyboard[0xB] = keys[SDL_SCANCODE_C];
     cpu.keyboard[0xF] = keys[SDL_SCANCODE_V];
+
+    // latch new key presses
+    for (int i = 0; i < 16; i++)
+    {
+        if (cpu.keyboard[i] && !cpu.prev_keyboard[i])
+            cpu.latched_key = i;
+    }
 }
 
 void update_screen(Chip8 &cpu, SDL_Renderer *renderer)
@@ -123,4 +136,5 @@ void update_screen(Chip8 &cpu, SDL_Renderer *renderer)
             }
         }
     }
+    SDL_RenderPresent(renderer);
 }
