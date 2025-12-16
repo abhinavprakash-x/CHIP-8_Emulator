@@ -75,6 +75,10 @@ This emulator targets **classic CHIP-8 behavior** with the following choices:
 
 These behaviors are intentional and documented.
 
+📘 **Architecture & Design**  
+For implementation details and emulator architecture, see  
+[CHIP-8 Architecture and Emulator Design](READMEchip8.md).
+
 ## Author
 Built by Abhinav Prakash
 Year: 2025
