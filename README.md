@@ -35,6 +35,7 @@ g++ main.cpp chip8.cpp -o chip8.exe ^
   -lSDL3
 ```
 Replace the include and lib flags with your Library folders.
+Also Copy the SDL3 dll files in the same folder.
 
 ### Run
 
