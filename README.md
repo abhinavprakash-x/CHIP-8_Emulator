@@ -84,6 +84,7 @@ Built by Abhinav Prakash
 Year: 2025
 
 ## Credits
+The entire code for the emulator (and roms/Custom) is written by me, but the roms (.ch8) files have been downloaded from other sources as listed below:
 
 [Timendus Test Suite for CHIP-8](https://github.com/Timendus/chip8-test-suite/)  
 Original GPL license is included in `roms/Timendus/LICENSES`.
