@@ -16,7 +16,7 @@ CPU execution, memory, timers, input handling, and graphics rendering.
 - Sprite rendering with XOR drawing and collision flag (VF)
 - Basic sound (beep)
 - Tested using Timendus' CHIP-8 test suite
-- Tested with games from Kripod’s CHIP-8 ROM collection
+- Tested with games from Various Sources (See Credits)
 
 ---
 
@@ -84,11 +84,15 @@ Built by Abhinav Prakash
 Year: 2025
 
 ## Credits
-The entire code for the emulator (and roms/Custom) is written by me, but the roms (.ch8) files have been downloaded from other sources as listed below:
+The entire code for the emulator (and roms/Custom) is written by me, but the other roms (.ch8) files have been downloaded from other sources as listed below:
 
-[Cowgod's CHIP-8 Technical Reference](Images/Cowgod's CHIP-8 Technical Reference.pdf)
+[Cowgod's CHIP-8 Technical Reference](Images/cowgod_reference.pdf)
+
 [Timendus Test Suite for CHIP-8](https://github.com/Timendus/chip8-test-suite/)  
-Original GPL license is included in `roms/Timendus/LICENSES`.
+Original GPL license is included in `roms/Timendus/LICENSE.txt`.
 
-[Kripod CHIP-8 ROMs](https://github.com/kripod/chip8-roms/)  
-Original license is included in `roms/kripod/LICENSES`.
+[Kripod's CHIP-8 ROMs Collection](https://github.com/kripod/chip8-roms/)  
+Original license is included in `roms/kripod/LICENSE`.
+
+[John Earnest's ROMs Collection](https://github.com/JohnEarnest/chip8Archive/)
+Original license is included in `roms/JohnEarnest/LICENSE`.
