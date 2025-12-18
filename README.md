@@ -17,6 +17,7 @@ CPU execution, memory, timers, input handling, and graphics rendering.
 - Basic sound (beep)
 - Tested using Timendus' CHIP-8 test suite
 - Tested with games from Various Sources (See Credits)
+- A Custom Assembler `roms/Custom/assembler.py`
 
 ---
 
@@ -25,6 +26,7 @@ CPU execution, memory, timers, input handling, and graphics rendering.
 ### Requirements
 - C++ compiler (g++)
 - SDL3
+- python (If you want to test out the assembler)
 
 ### Build Command (Windows)
 
@@ -40,7 +42,12 @@ Also Copy the SDL3 dll files in the same folder.
 ### Run
 
 ```bash
-./chip8.exe <path_to_rom.ch8>
+./chip8.exe path_to_rom.ch8
+```
+
+### Assembler Usage
+```bash
+python assembler.py rom.asm
 ```
 
 ## Control Mapping
@@ -84,7 +91,7 @@ Built by Abhinav Prakash
 Year: 2025
 
 ## Credits
-The entire code for the emulator (and roms/Custom) is written by me, but the other roms (.ch8) files have been downloaded from other sources as listed below:
+The entire code for the emulator, assembler and custom roms are written by me, but the other roms (.ch8) files have been downloaded from other sources as listed below:
 
 [Cowgod's CHIP-8 Technical Reference](Images/cowgod_reference.pdf)
 

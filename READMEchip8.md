@@ -82,6 +82,7 @@ The emulator was tested using:
 - Timendus' CHIP-8 test suite
 - IBM Logo ROM
 - Keypad and timing tests
+- Some Custom ROMS I wrote
 
 ---
 
@@ -92,6 +93,7 @@ The emulator was tested using:
 - Input timing issues
 - Debugging real-time systems
 - Reading technical specifications
+- A little bit of Assembly
 
 ---
 
