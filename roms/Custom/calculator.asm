@@ -127,7 +127,7 @@ JP 0x2CC
 JP 0x2C2
 
 ; result
-LD I, 0x419
+LD I, 0x450
 LD B, V0
 LD V2, [I]
 LD F, V0
