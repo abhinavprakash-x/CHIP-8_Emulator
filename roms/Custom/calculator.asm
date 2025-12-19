@@ -1,5 +1,7 @@
+; store sprite data in RAM at 0x400
 LD I, 0x400
 
+; +
 LD V0, 0x10
 LD V1, 0x10
 LD V2, 0x7C
@@ -7,6 +9,7 @@ LD V3, 0x10
 LD V4, 0x10
 LD [I], V4
 
+; -
 LD V0, 0x0
 LD V1, 0x0
 LD V2, 0x3C
@@ -14,6 +17,7 @@ LD V3, 0x0
 LD V4, 0x0
 LD [I], V4
 
+; x
 LD V0, 0x44
 LD V1, 0x28
 LD V2, 0x10
@@ -21,6 +25,7 @@ LD V3, 0x28
 LD V4, 0x44
 LD [I], V4
 
+; /
 LD V0, 0x4
 LD V1, 0x8
 LD V2, 0x10
@@ -28,6 +33,7 @@ LD V3, 0x20
 LD V4, 0x40
 LD [I], V4
 
+; =
 LD V0, 0x0
 LD V1, 0x3C
 LD V2, 0x0
@@ -39,22 +45,26 @@ LD [I], V4
 CLS
 LD VD, 0xA
 LD VE, 0xA
-LD V0, K
+LD V0, K    ; first number tens digit stored in v0
 LD F, V0
 DRW VD, VE, 0x5
 
+; multiply v0 with 10 (v0*8)+(v0*2)
 SHL V0, V0
 LD VA, V0
 SHL VA, VA
 SHL VA, VA
 ADD V0, VA
 
-LD V1, K
+; take the ones place digit and add it to v0 to make a
+; full 2 digit number (v0 = v0+v1)
+LD V1, K    ; first number ones digit stored in v1
 LD F, V1
 ADD VD, 0x8
 DRW VD, VE, 0x5
-ADD V0, V1
+ADD V0, V1  ; v0 = v0 + v1
 
+; operator input
 LD V1, K
 SNE V1, 0xA
 LD I, 0x400
@@ -65,32 +75,38 @@ LD I, 0x40A
 SNE V1, 0xE
 LD I, 0x40F
 
+; draw operator
 ADD VD, 0x8
 DRW VD, VE, 0x5
 
+; second number tens digit in v2
 LD V2, K
 LD F, V2
 ADD VD, 0x8
 DRW VD, VE, 0x5
 
+; v2 * 10
 SHL V2, V2
 LD VA, V2
 SHL VA, VA
 SHL VA, VA
 ADD V2, VA
 
+; second number ones digit
 LD V3, K
 LD F, V3
 ADD VD, 0x8
 DRW VD, VE, 0x5
-ADD V2, V3
+ADD V2, V3      ;v2 = v2+v3, full 2 digit number
 
+; draw = symbol
 LD I, 0x414
 ADD VD, 0x8
 DRW VD, VE, 0x5
 
 CLS
 
+; check for operator A = +, B = -, D = x, E = /
 SNE V1, 0xA
 JP 0x2A8
 SNE V1, 0xB

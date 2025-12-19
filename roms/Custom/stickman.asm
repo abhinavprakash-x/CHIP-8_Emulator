@@ -1,7 +1,5 @@
 ; 2d Stickman World
-; ===============================================================
 ; Load sprite
-; ===============================================================
 LD V0, 0x18     ; 00011000
 LD V1, 0x7E     ; 01111110
 LD V2, 0x18     ; 00011000
@@ -13,9 +11,7 @@ LD VA, 0x10     ; set x coordinate to 16
 LD VB, 0x10     ; set y coordinate to 16
 LD I, 0x300     ; set Index register back to 0x300
 
-; ===============================================================
 ; Game loop
-; ===============================================================
 CLS             ; clear screen
 DRW VA, VB, 0x5 ; draw the sprite
 LD VC, 0x1      ; store 1 in register V[C]
