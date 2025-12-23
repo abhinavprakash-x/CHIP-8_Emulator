@@ -8,6 +8,7 @@ const int cell_height = height / 32;
 
 void handle_input(Chip8 &cpu);
 void update_screen(Chip8 &cpu, SDL_Renderer *renderer);
+void print_data(Chip8 &cpu);
 
 int main(int argc, char* argv[])
 {
@@ -41,22 +42,14 @@ int main(int argc, char* argv[])
             {
                 running = false;
             }
+            if(event.type == SDL_EVENT_KEY_DOWN && event.key.scancode == SDL_SCANCODE_B)
+            {
+                print_data(cpu);
+            }
         }
 
         handle_input(cpu);
         
-        //cpu cycle and timers
-        if(current_tick - last_cpu_tick >= 1) //1000Hz
-        {
-            cpu.cycle();
-            last_cpu_tick = current_tick;
-        }
-        if(current_tick - last_timer_tick >= 16) //60Hz
-        {
-            cpu.update_timers();
-            last_timer_tick = current_tick;
-        }
-
         //update screen and handle key press and play sound
         if(cpu.draw_flag)
         {
@@ -69,6 +62,18 @@ int main(int argc, char* argv[])
             std::cout<< "\a\a" << std::flush;
         }
         wasBeeping = (cpu.soundTimer > 0);
+
+        //cpu cycle and timers
+        if(current_tick - last_cpu_tick >= 1) //1000Hz
+        {
+            cpu.cycle();
+            last_cpu_tick = current_tick;
+        }
+        if(current_tick - last_timer_tick >= 16) //60Hz
+        {
+            cpu.update_timers();
+            last_timer_tick = current_tick;
+        }
 
         SDL_Delay(1);
     }
@@ -132,4 +137,21 @@ void update_screen(Chip8 &cpu, SDL_Renderer *renderer)
         }
     }
     SDL_RenderPresent(renderer);
+}
+
+void print_data(Chip8 &cpu)
+{
+    using namespace std;
+
+    cout << dec;  // ensure decimal
+
+    for (int i = 0; i < 16; ++i)
+    {
+        cout << "V[" << hex << i << "]="
+             << dec << static_cast<int>(cpu.V[i]) << " ";
+    }
+
+    cout << "\nPC: 0x" << hex << cpu.PC;
+    cout << "\nI : 0x" << hex << cpu.I;
+    cout << "\n------------------------\n";
 }
